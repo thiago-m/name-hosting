@@ -19,11 +19,39 @@
               <div class="card-body">
                 <ul class="list-group">
                   <li class="list-group-item" v-for="prefix in prefixos" :key="prefix">
-                    {{prefix}}
+                    <div class="row">
+                      <div class="col-md">
+                        {{prefix}}
+                      </div>
+                      <div class="col-md text-right">
+                        <button 
+                          class="btn btn-danger"
+                          @click="deletePrefix(prefix)"
+                        >
+                          <span class="fa fa-trash"></span>
+                        </button>
+                      </div>
+                    </div>
                   </li>
                 </ul>
                 <br>
-                <input type="text" class="form-control" placeholder="Digite o prefixo">
+                <div class="input-group">
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Digite o prefixo"
+                    v-model="prefix"
+                    @keyup.enter="addPrefix"
+                  >
+                  <div class="input-group-append">
+                    <button 
+                      class="btn btn-info"
+                      @click="addPrefix"
+                    >
+                      <span class="fa fa-plus"></span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -36,11 +64,39 @@
               <div class="card-body">
                 <ul class="list-group">
                   <li class="list-group-item" v-for="sufix in sufixes" :key="sufix">
-                    {{sufix}}
+                    <div class="row">
+                      <div class="col-md">
+                        {{sufix}}
+                      </div>
+                      <div class="col-md text-right">
+                        <button 
+                          class="btn btn-danger"
+                          @click="deleteSufix(sufix)"
+                        >
+                          <span class="fa fa-trash"></span>
+                        </button>
+                      </div>
+                    </div>
                   </li>
                 </ul>
                 <br>
-                <input type="text" class="form-control" placeholder="Digite o sufixos">
+                <div class="input-group">
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  placeholder="Digite o sufixos"
+                  v-model="sufix"
+                  @keyup.enter="addSufix"
+                >
+                  <div class="input-group-append">
+                    <button 
+                      class="btn btn-info"
+                      @click="addSufix"
+                    >
+                      <span class="fa fa-plus"></span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -72,9 +128,39 @@ export default {
   name: 'app',
   data() {
     return {
-      prefixos: ['Air', 'Jet', 'Flight'],
-      sufixes: ['Hub', 'Station', 'Mart'],
-      domains: ['AirHub', 'AirStation', 'AirMart']
+      prefixos: [],
+      sufixes: [],
+      domains: [],
+      prefix: '',
+      sufix: ''
+    }
+  },
+  methods: {
+    addPrefix() {
+      this.prefixos.push(this.prefix);
+      this.prefix = '';
+      this.generate()
+    },
+    addSufix() {
+      this.sufixes.push(this.sufix);
+      this.sufix = '';
+      this.generate()
+    },
+    deletePrefix(prefix) {
+      this.prefixos.splice(this.prefixos.indexOf(prefix), 1)
+      this.generate()
+    },
+    deleteSufix(sufix) {
+      this.sufixes.splice(this.sufixes.indexOf(sufix), 1)
+      this.generate()
+    },
+    generate() {
+      this.domains = [];
+      for (const prefix of this.prefixos) {
+        for (const sufix of this.sufixes) {
+          this.domains.push(prefix + sufix);
+        }
+      }
     }
   }
 }
