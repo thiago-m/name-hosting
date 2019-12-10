@@ -1,4 +1,4 @@
-# name-hostign
+# name-hosting
 
 ## Project setup
 ```

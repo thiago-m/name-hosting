@@ -109,8 +109,17 @@
         <div class="card">
           <div class="card-body">
             <ul class="list-group">
-              <li class="list-group-item" v-for="domain in domains" :key="domain">
-                {{ domain }}
+              <li class="list-group-item" v-for="domain in domains" :key="domain.name">
+                <div class="row">
+                  <div class="col-md">
+                    {{ domain.name }}
+                  </div>
+                  <div class="col-md text-right">
+                    <a class="btn btn-info" :href="domain.checkout" target="_blank">
+                      <span class="fa fa-shopping-cart"></span>
+                    </a>
+                  </div>
+                </div>
               </li>
             </ul>
           </div>
@@ -128,9 +137,8 @@ export default {
   name: 'app',
   data() {
     return {
-      prefixos: [],
-      sufixes: [],
-      domains: [],
+      prefixos: ['Air', 'Jet', 'Flight'],
+      sufixes: ['Hub', 'Station', 'Mart'],
       prefix: '',
       sufix: ''
     }
@@ -139,28 +147,30 @@ export default {
     addPrefix() {
       this.prefixos.push(this.prefix);
       this.prefix = '';
-      this.generate()
     },
     addSufix() {
       this.sufixes.push(this.sufix);
       this.sufix = '';
-      this.generate()
     },
     deletePrefix(prefix) {
       this.prefixos.splice(this.prefixos.indexOf(prefix), 1)
-      this.generate()
     },
     deleteSufix(sufix) {
       this.sufixes.splice(this.sufixes.indexOf(sufix), 1)
-      this.generate()
-    },
-    generate() {
-      this.domains = [];
+    }   
+  },
+  computed: {
+    domains() {
+      let domain = []
       for (const prefix of this.prefixos) {
         for (const sufix of this.sufixes) {
-          this.domains.push(prefix + sufix);
+          const name = prefix + sufix
+          const url = name.toLowerCase();
+          const checkout = `https://checkout.hostgator.com.br/?a=add&sld=${url}&tld=.com`
+          domain.push({name, checkout});
         }
       }
+      return domain;
     }
   }
 }
